@@ -1,5 +1,5 @@
-// Базовый URL API (замените на реальный URL вашего API)
-const API_BASE_URL = 'http://exam-api-courses.std-900.ist.mospolytech.ru/';
+// Базовый URL API
+const API_BASE_URL = 'http://exam-api-courses.std-900.ist.mospolytech.ru/api';
 
 // Функция для отображения уведомлений
 function showNotification(message, type = 'info') {
