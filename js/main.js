@@ -30,9 +30,9 @@ async function loadCourses(page = 1, name = '', level = '') {
             <div class="col-md-6 col-lg-4">
                 <div class="card course-card shadow-sm h-100">
                     <div class="position-relative">
-                        <img src="${course.image || 'https://via.placeholder.com/300x200?text=Курс'}" 
-                             class="card-img-top" 
-                             alt="${course.name || 'Курс'}">
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px; color: white; font-size: 1.5rem;">
+                            ${course.image ? `<img src="${course.image}" class="w-100 h-100" style="object-fit: cover;" alt="${course.name || 'Курс'}">` : '📚 Курс'}
+                        </div>
                         <span class="badge bg-primary course-badge">${course.level || 'Уровень'}</span>
                     </div>
                     <div class="card-body d-flex flex-column">
@@ -133,9 +133,9 @@ async function loadTutors() {
         tutorsContainer.innerHTML = tutors.map(tutor => `
             <div class="col-md-6 col-lg-4">
                 <div class="card tutor-card shadow-sm h-100">
-                    <img src="${tutor.photo || 'https://via.placeholder.com/300x250?text=Репетитор'}" 
-                         class="card-img-top" 
-                         alt="${tutor.name || 'Репетитор'}">
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; color: white; font-size: 2rem;">
+                        ${tutor.photo ? `<img src="${tutor.photo}" class="w-100 h-100" style="object-fit: cover;" alt="${tutor.name || 'Репетитор'}">` : '👨‍🏫'}
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">${tutor.name || 'Имя не указано'}</h5>
                         <p class="card-text">

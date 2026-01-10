@@ -29,6 +29,8 @@ async function apiRequest(url, method = 'GET', data = null) {
             headers: {
                 'Content-Type': 'application/json',
             },
+            mode: 'cors',
+            credentials: 'omit'
         };
 
         if (data && (method === 'POST' || method === 'PUT')) {
@@ -44,7 +46,16 @@ async function apiRequest(url, method = 'GET', data = null) {
         return await response.json();
     } catch (error) {
         console.error('API request error:', error);
-        showNotification(`Ошибка при выполнении запроса: ${error.message}`, 'error');
+        
+        // Более детальная обработка ошибок CORS
+        if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+            const errorMsg = 'Ошибка CORS: Сервер не разрешает запросы с этого домена. ' +
+                           'Для локальной разработки используйте прокси-сервер или расширение браузера для обхода CORS.';
+            showNotification(errorMsg, 'error');
+        } else {
+            showNotification(`Ошибка при выполнении запроса: ${error.message}`, 'error');
+        }
+        
         throw error;
     }
 }
