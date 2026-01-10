@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Языковая школа</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="https://via.placeholder.com/50x50/007bff/ffffff?text=LS" alt="Логотип" class="logo me-2">
+                    <span class="school-name">Языковая школа "Полиглот"</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#courses">Курсы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html#about">О нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="account.html">Личный кабинет</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Область уведомлений -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <main class="py-5">
+        <div class="container">
+            <h1 class="mb-4">Личный кабинет</h1>
+
+            <!-- Форма создания новой заявки -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>Создать новую заявку</h3>
+                </div>
+                <div class="card-body">
+                    <form id="orderForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="orderName" class="form-label">Имя *</label>
+                                <input type="text" class="form-control" id="orderName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orderEmail" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="orderEmail" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orderPhone" class="form-label">Телефон *</label>
+                                <input type="tel" class="form-control" id="orderPhone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orderCourse" class="form-label">Курс *</label>
+                                <select class="form-select" id="orderCourse" required>
+                                    <option value="">Выберите курс</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orderTutor" class="form-label">Репетитор</label>
+                                <select class="form-select" id="orderTutor">
+                                    <option value="">Выберите репетитора (необязательно)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="orderLevel" class="form-label">Уровень *</label>
+                                <select class="form-select" id="orderLevel" required>
+                                    <option value="">Выберите уровень</option>
+                                    <option value="начальный">Начальный</option>
+                                    <option value="средний">Средний</option>
+                                    <option value="продвинутый">Продвинутый</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label for="orderComment" class="form-label">Комментарий</label>
+                                <textarea class="form-control" id="orderComment" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Создать заявку</button>
+                                <button type="button" class="btn btn-secondary" id="resetOrderForm">Очистить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Список заявок -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Мои заявки</h3>
+                </div>
+                <div class="card-body">
+                    <div id="ordersContainer">
+                        <!-- Заявки будут загружены через API -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно для редактирования заявки -->
+    <div class="modal fade" id="editOrderModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактировать заявку</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOrderForm">
+                        <input type="hidden" id="editOrderId">
+                        <div class="mb-3">
+                            <label for="editOrderName" class="form-label">Имя</label>
+                            <input type="text" class="form-control" id="editOrderName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editOrderEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderPhone" class="form-label">Телефон</label>
+                            <input type="tel" class="form-control" id="editOrderPhone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderCourse" class="form-label">Курс</label>
+                            <select class="form-select" id="editOrderCourse">
+                                <option value="">Выберите курс</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderTutor" class="form-label">Репетитор</label>
+                            <select class="form-select" id="editOrderTutor">
+                                <option value="">Выберите репетитора</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderLevel" class="form-label">Уровень</label>
+                            <select class="form-select" id="editOrderLevel">
+                                <option value="">Выберите уровень</option>
+                                <option value="начальный">Начальный</option>
+                                <option value="средний">Средний</option>
+                                <option value="продвинутый">Продвинутый</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editOrderComment" class="form-label">Комментарий</label>
+                            <textarea class="form-control" id="editOrderComment" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveEditOrder">Сохранить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/account.js"></script>
+</body>
+</html>
+

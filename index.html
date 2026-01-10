@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Языковая школа - Главная</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <img src="https://via.placeholder.com/50x50/007bff/ffffff?text=LS" alt="Логотип" class="logo me-2">
+                    <span class="school-name">Языковая школа "Полиглот"</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.html">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#courses">Курсы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">О нас</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tutors">Репетиторы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#resources">Ресурсы</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contacts">Контакты</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="account.html">Личный кабинет</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Область уведомлений -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <main>
+        <!-- Блок описания языковой школы -->
+        <section id="about" class="about-section py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h1 class="display-4 mb-4">Добро пожаловать в языковую школу "Полиглот"</h1>
+                        <p class="lead mb-4">
+                            Мы предлагаем качественное обучение иностранным языкам для студентов всех уровней. 
+                            Наша миссия - помочь вам достичь ваших языковых целей с помощью опытных преподавателей 
+                            и современных методик обучения.
+                        </p>
+                        <p class="mb-4">
+                            В нашей школе вы можете изучать английский, испанский, французский, немецкий, китайский 
+                            и многие другие языки. Мы предлагаем как групповые, так и индивидуальные занятия, 
+                            адаптированные под ваш уровень и цели.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преимущества изучения иностранного языка -->
+        <section class="advantages-section py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Преимущества изучения иностранного языка</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">🌍</div>
+                                <h5 class="card-title">Расширение горизонтов</h5>
+                                <p class="card-text">
+                                    Изучение языков открывает новые возможности для путешествий, 
+                                    работы и общения с людьми по всему миру.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">💼</div>
+                                <h5 class="card-title">Карьерный рост</h5>
+                                <p class="card-text">
+                                    Знание иностранных языков значительно повышает ваши шансы 
+                                    на успешную карьеру в международных компаниях.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">🧠</div>
+                                <h5 class="card-title">Развитие мышления</h5>
+                                <p class="card-text">
+                                    Изучение языков улучшает память, развивает когнитивные способности 
+                                    и помогает лучше понимать свою родную культуру.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">👥</div>
+                                <h5 class="card-title">Новые знакомства</h5>
+                                <p class="card-text">
+                                    Языки помогают находить новых друзей и налаживать связи 
+                                    с людьми из разных стран и культур.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">📚</div>
+                                <h5 class="card-title">Доступ к информации</h5>
+                                <p class="card-text">
+                                    Знание языков открывает доступ к огромному количеству 
+                                    литературы, фильмов и образовательных ресурсов.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="advantage-icon mb-3">🎯</div>
+                                <h5 class="card-title">Достижение целей</h5>
+                                <p class="card-text">
+                                    Изучение языка - это вызов, который помогает развивать 
+                                    дисциплину и уверенность в себе.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Форма поиска курсов -->
+        <section class="search-section py-4 bg-white">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h3 class="text-center mb-4">Поиск курсов</h3>
+                        <form id="searchForm" class="search-form">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="searchName" class="form-label">Название курса</label>
+                                    <input type="text" class="form-control" id="searchName" placeholder="Введите название курса">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="searchLevel" class="form-label">Уровень</label>
+                                    <select class="form-select" id="searchLevel">
+                                        <option value="">Все уровни</option>
+                                        <option value="начальный">Начальный</option>
+                                        <option value="средний">Средний</option>
+                                        <option value="продвинутый">Продвинутый</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">Найти курсы</button>
+                                    <button type="button" class="btn btn-secondary btn-lg ms-2" id="resetSearch">Сбросить</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Предлагаемые курсы -->
+        <section id="courses" class="courses-section py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Предлагаемые курсы</h2>
+                <div id="coursesContainer" class="row g-4">
+                    <!-- Курсы будут загружены через API -->
+                </div>
+                <!-- Пагинация курсов -->
+                <nav aria-label="Навигация по страницам курсов" class="mt-5">
+                    <ul id="pagination" class="pagination justify-content-center">
+                        <!-- Пагинация будет создана динамически -->
+                    </ul>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Список репетиторов -->
+        <section id="tutors" class="tutors-section py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Наши репетиторы</h2>
+                <div id="tutorsContainer" class="row g-4">
+                    <!-- Репетиторы будут загружены через API -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Интерактивная карта учебных ресурсов -->
+        <section id="resources" class="resources-section py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Интерактивная карта учебных ресурсов</h2>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <input type="text" id="mapSearch" class="form-control" placeholder="Поиск: языковой клуб, курсы, библиотеки...">
+                    </div>
+                    <div class="col-md-6">
+                        <select id="mapFilter" class="form-select">
+                            <option value="">Все категории</option>
+                            <option value="educational">Образовательные учреждения</option>
+                            <option value="community">Общественные центры</option>
+                            <option value="library">Публичные библиотеки</option>
+                            <option value="private">Частные языковые курсы</option>
+                            <option value="cafe">Языковые кафе или клубы</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="map" style="width: 100%; height: 600px;"></div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section id="contacts" class="contacts-section py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Контакты</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Адрес</h4>
+                        <p>г. Москва, ул. Примерная, д. 1</p>
+                        <h4>Телефон</h4>
+                        <p>+7 (495) 123-45-67</p>
+                        <h4>Email</h4>
+                        <p>info@polyglot-school.ru</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Часы работы</h4>
+                        <p>Пн-Пт: 9:00 - 21:00<br>Сб-Вс: 10:00 - 18:00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2026 Языковая школа "Полиглот". Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=0f2152ae-2c33-46cc-94d9-51656c675b81&lang=ru_RU" type="text/javascript"></script>
+    <script src="js/api.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
