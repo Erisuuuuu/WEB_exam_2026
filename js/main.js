@@ -25,7 +25,7 @@ async function loadCourses(page = 1, name = null, level = null) {
     const coursesContainer = document.getElementById('coursesContainer');
     if (!coursesContainer) return;
 
-    coursesContainer.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Загрузка...</span></div></div>';
+    coursesContainer.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
     try {
         const response = await coursesAPI.getCourses(page, coursesPerPage, searchName, searchLevel);
@@ -33,7 +33,7 @@ async function loadCourses(page = 1, name = null, level = null) {
         const total = response.total || 0;
 
         if (courses.length === 0) {
-            coursesContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">Курсы не найдены</p></div>';
+            coursesContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">No courses found</p></div>';
             return;
         }
 
@@ -42,21 +42,21 @@ async function loadCourses(page = 1, name = null, level = null) {
                 <div class="card course-card shadow-sm h-100">
                     <div class="position-relative">
                         <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px; color: white; font-size: 1.5rem;">
-                            ${course.image ? `<img src="${course.image}" class="w-100 h-100" style="object-fit: cover;" alt="${course.name || 'Курс'}">` : '📚 Курс'}
+                            ${course.image ? `<img src="${course.image}" class="w-100 h-100" style="object-fit: cover;" alt="${course.name || 'Course'}">` : '📚 Course'}
                         </div>
-                        <span class="badge bg-primary course-badge">${course.level || 'Уровень'}</span>
+                        <span class="badge bg-primary course-badge">${course.level || 'Level'}</span>
                     </div>
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">${course.name || 'Название курса'}</h5>
-                        <p class="card-text flex-grow-1">${course.description || 'Описание курса отсутствует'}</p>
+                        <h5 class="card-title">${course.name || 'Course Name'}</h5>
+                        <p class="card-text flex-grow-1">${course.description || 'No description available'}</p>
                         <div class="mt-auto">
                             <p class="text-muted mb-2">
-                                <small>Преподаватель: ${course.teacher || 'Не указан'}</small><br>
-                                <small>Длительность: ${course.total_length || 'Не указана'} недель</small><br>
-                                <small>Стоимость: ${course.course_fee_per_hour || 'Не указана'} руб/час</small>
+                                <small>Teacher: ${course.teacher || 'Not specified'}</small><br>
+                                <small>Duration: ${course.total_length || 'Not specified'} weeks</small><br>
+                                <small>Price: ${course.course_fee_per_hour || 'Not specified'} RUB/hour</small>
                             </p>
                             <button class="btn btn-primary w-100" onclick="showCourseDetails(${course.id})">
-                                Подробнее
+                                Details
                             </button>
                         </div>
                     </div>
@@ -64,12 +64,12 @@ async function loadCourses(page = 1, name = null, level = null) {
             </div>
         `).join('');
 
-        // Создание пагинации
+        // Create pagination
         createPagination(page, Math.ceil(total / coursesPerPage));
         currentPage = page;
 
     } catch (error) {
-        coursesContainer.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Ошибка при загрузке курсов</p></div>';
+        coursesContainer.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Error loading courses</p></div>';
         console.error('Error loading courses:', error);
     }
 }
@@ -84,19 +84,19 @@ function createPagination(currentPage, totalPages) {
 
     let paginationHTML = '';
 
-    // Кнопка "Предыдущая"
+    // Previous button
     paginationHTML += `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="loadCourses(${currentPage - 1}, null, null); return false;">Предыдущая</a>
+            <a class="page-link" href="#" onclick="loadCourses(${currentPage - 1}, null, null); return false;">Previous</a>
         </li>
     `;
 
-    // Номера страниц
+    // Page numbers
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
             paginationHTML += `
                 <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="loadCourses(${i}); return false;">${i}</a>
+                    <a class="page-link" href="#" onclick="loadCourses(${i}, null, null); return false;">${i}</a>
                 </li>
             `;
         } else if (i === currentPage - 2 || i === currentPage + 2) {
@@ -104,30 +104,30 @@ function createPagination(currentPage, totalPages) {
         }
     }
 
-    // Кнопка "Следующая"
+    // Next button
     paginationHTML += `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="loadCourses(${currentPage + 1}); return false;">Следующая</a>
+            <a class="page-link" href="#" onclick="loadCourses(${currentPage + 1}, null, null); return false;">Next</a>
         </li>
     `;
 
     paginationContainer.innerHTML = paginationHTML;
 }
 
-// Показать детали курса
+// Show course details
 async function showCourseDetails(courseId) {
     try {
         const course = await coursesAPI.getCourse(courseId);
         if (course) {
             const startDates = course.start_dates && course.start_dates.length > 0 
-                ? course.start_dates.slice(0, 3).map(d => new Date(d).toLocaleDateString('ru-RU')).join(', ') 
-                : 'Не указаны';
-            alert(`Курс: ${course.name || 'Название не указано'}\n\nОписание: ${course.description || 'Описание отсутствует'}\n\nПреподаватель: ${course.teacher || 'Не указан'}\n\nУровень: ${course.level || 'Не указан'}\n\nДлительность: ${course.total_length || 'Не указана'} недель\n\nЗанятий в неделю: ${course.week_length || 'Не указано'}\n\nСтоимость: ${course.course_fee_per_hour || 'Не указана'} руб/час\n\nБлижайшие даты начала: ${startDates}`);
+                ? course.start_dates.slice(0, 3).map(d => new Date(d).toLocaleDateString('en-US')).join(', ') 
+                : 'Not specified';
+            alert(`Course: ${course.name || 'Name not specified'}\n\nDescription: ${course.description || 'No description'}\n\nTeacher: ${course.teacher || 'Not specified'}\n\nLevel: ${course.level || 'Not specified'}\n\nDuration: ${course.total_length || 'Not specified'} weeks\n\nClasses per week: ${course.week_length || 'Not specified'}\n\nPrice: ${course.course_fee_per_hour || 'Not specified'} RUB/hour\n\nUpcoming start dates: ${startDates}`);
         } else {
-            showNotification('Не удалось загрузить информацию о курсе', 'error');
+            showNotification('Failed to load course information', 'error');
         }
     } catch (error) {
-        showNotification('Ошибка при загрузке информации о курсе', 'error');
+        showNotification('Error loading course information', 'error');
     }
 }
 
@@ -136,13 +136,13 @@ async function loadTutors() {
     const tutorsContainer = document.getElementById('tutorsContainer');
     if (!tutorsContainer) return;
 
-    tutorsContainer.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Загрузка...</span></div></div>';
+    tutorsContainer.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
     try {
         const tutors = await tutorsAPI.getTutors();
 
         if (tutors.length === 0) {
-            tutorsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">Репетиторы не найдены</p></div>';
+            tutorsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">No tutors found</p></div>';
             return;
         }
 
@@ -150,19 +150,19 @@ async function loadTutors() {
             <div class="col-md-6 col-lg-4">
                 <div class="card tutor-card shadow-sm h-100">
                     <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px; color: white; font-size: 2rem;">
-                        ${tutor.photo ? `<img src="${tutor.photo}" class="w-100 h-100" style="object-fit: cover;" alt="${tutor.name || 'Репетитор'}">` : '👨‍🏫'}
+                        ${tutor.photo ? `<img src="${tutor.photo}" class="w-100 h-100" style="object-fit: cover;" alt="${tutor.name || 'Tutor'}">` : '👨‍🏫'}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">${tutor.name || 'Имя не указано'}</h5>
+                        <h5 class="card-title">${tutor.name || 'Name not specified'}</h5>
                         <p class="card-text">
-                            <strong>Языки:</strong> ${tutor.languages_offered ? tutor.languages_offered.join(', ') : (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Не указаны')}<br>
-                            <strong>Опыт:</strong> ${tutor.work_experience || tutor.experience || 'Не указан'} ${tutor.work_experience ? 'лет' : ''}<br>
-                            <strong>Уровень:</strong> ${tutor.language_level || 'Не указан'}<br>
-                            <strong>Стоимость:</strong> ${tutor.price_per_hour || 'Не указана'} ${tutor.price_per_hour ? 'руб/час' : ''}
+                            <strong>Languages:</strong> ${tutor.languages_offered ? tutor.languages_offered.join(', ') : (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Not specified')}<br>
+                            <strong>Experience:</strong> ${tutor.work_experience || tutor.experience || 'Not specified'} ${tutor.work_experience ? 'years' : ''}<br>
+                            <strong>Level:</strong> ${tutor.language_level || 'Not specified'}<br>
+                            <strong>Price:</strong> ${tutor.price_per_hour || 'Not specified'} ${tutor.price_per_hour ? 'RUB/hour' : ''}
                         </p>
                         ${tutor.description ? `<p class="card-text"><small class="text-muted">${tutor.description}</small></p>` : ''}
                         <button class="btn btn-outline-primary" onclick="showTutorDetails(${tutor.id})">
-                            Подробнее
+                            Details
                         </button>
                     </div>
                 </div>
@@ -170,24 +170,24 @@ async function loadTutors() {
         `).join('');
 
     } catch (error) {
-        tutorsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Ошибка при загрузке репетиторов</p></div>';
+        tutorsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Error loading tutors</p></div>';
         console.error('Error loading tutors:', error);
     }
 }
 
-// Показать детали репетитора
+// Show tutor details
 async function showTutorDetails(tutorId) {
     try {
         const tutor = await tutorsAPI.getTutor(tutorId);
         if (tutor) {
             const languages = tutor.languages_offered ? tutor.languages_offered.join(', ') : 
-                            (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Не указаны');
-            alert(`Репетитор: ${tutor.name || 'Имя не указано'}\n\nЯзыки (преподает): ${languages}\n\nОпыт работы: ${tutor.work_experience || tutor.experience || 'Не указан'} ${tutor.work_experience ? 'лет' : ''}\n\nУровень: ${tutor.language_level || 'Не указан'}\n\nСтоимость: ${tutor.price_per_hour || 'Не указана'} ${tutor.price_per_hour ? 'руб/час' : ''}`);
+                            (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Not specified');
+            alert(`Tutor: ${tutor.name || 'Name not specified'}\n\nLanguages (teaches): ${languages}\n\nWork Experience: ${tutor.work_experience || tutor.experience || 'Not specified'} ${tutor.work_experience ? 'years' : ''}\n\nLevel: ${tutor.language_level || 'Not specified'}\n\nPrice: ${tutor.price_per_hour || 'Not specified'} ${tutor.price_per_hour ? 'RUB/hour' : ''}`);
         } else {
-            showNotification('Не удалось загрузить информацию о репетиторе', 'error');
+            showNotification('Failed to load tutor information', 'error');
         }
     } catch (error) {
-        showNotification('Ошибка при загрузке информации о репетиторе', 'error');
+        showNotification('Error loading tutor information', 'error');
     }
 }
 

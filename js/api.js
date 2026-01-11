@@ -52,7 +52,18 @@ async function apiRequest(url, method = 'GET', data = null) {
         const response = await fetch(fullUrl, options);
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            // Пытаемся получить детали ошибки из ответа
+            let errorMessage = `HTTP error! status: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                console.error('Error details:', errorData);
+                if (errorData.message || errorData.error) {
+                    errorMessage += ` - ${errorData.message || errorData.error}`;
+                }
+            } catch (e) {
+                // Если не удалось распарсить JSON, используем стандартное сообщение
+            }
+            throw new Error(errorMessage);
         }
 
         const jsonData = await response.json();
@@ -61,13 +72,13 @@ async function apiRequest(url, method = 'GET', data = null) {
     } catch (error) {
         console.error('API request error:', error);
         
-        // Более детальная обработка ошибок CORS
+        // More detailed CORS error handling
         if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
-            const errorMsg = 'Ошибка CORS: Сервер не разрешает запросы с этого домена. ' +
-                           'Для локальной разработки используйте прокси-сервер или расширение браузера для обхода CORS.';
+            const errorMsg = 'CORS Error: Server does not allow requests from this domain. ' +
+                           'For local development, use a proxy server or browser extension to bypass CORS.';
             showNotification(errorMsg, 'error');
         } else {
-            showNotification(`Ошибка при выполнении запроса: ${error.message}`, 'error');
+            showNotification(`Request error: ${error.message}`, 'error');
         }
         
         throw error;
@@ -193,6 +204,10 @@ const ordersAPI = {
     async getOrders() {
         try {
             const response = await apiRequest('/orders');
+            // API возвращает массив напрямую, а не объект с items
+            if (Array.isArray(response)) {
+                return response;
+            }
             return response.items || [];
         } catch (error) {
             console.error('Error fetching orders:', error);
@@ -204,10 +219,10 @@ const ordersAPI = {
     async createOrder(orderData) {
         try {
             const response = await apiRequest('/orders', 'POST', orderData);
-            showNotification('Заявка успешно создана!', 'success');
+            showNotification('Order successfully created!', 'success');
             return response;
         } catch (error) {
-            showNotification('Ошибка при создании заявки', 'error');
+            showNotification('Error creating order', 'error');
             throw error;
         }
     },
@@ -216,10 +231,10 @@ const ordersAPI = {
     async updateOrder(orderId, orderData) {
         try {
             const response = await apiRequest(`/orders/${orderId}`, 'PUT', orderData);
-            showNotification('Заявка успешно обновлена!', 'success');
+            showNotification('Order successfully updated!', 'success');
             return response;
         } catch (error) {
-            showNotification('Ошибка при обновлении заявки', 'error');
+            showNotification('Error updating order', 'error');
             throw error;
         }
     },
@@ -228,10 +243,10 @@ const ordersAPI = {
     async deleteOrder(orderId) {
         try {
             const response = await apiRequest(`/orders/${orderId}`, 'DELETE');
-            showNotification('Заявка успешно удалена!', 'success');
+            showNotification('Order successfully deleted!', 'success');
             return response;
         } catch (error) {
-            showNotification('Ошибка при удалении заявки', 'error');
+            showNotification('Error deleting order', 'error');
             throw error;
         }
     },
