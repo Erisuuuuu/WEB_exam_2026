@@ -1,6 +1,5 @@
 // Базовый URL API
-// Для локальной разработки используйте прокси: '/api'
-// Для продакшена: 'http://exam-api-courses.std-900.ist.mospolytech.ru/api'
+
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? '/api' 
     : 'http://exam-api-courses.std-900.ist.mospolytech.ru/api';
