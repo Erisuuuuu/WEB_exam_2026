@@ -1,0 +1,17 @@
+{
+  "name": "web-exam-2026",
+  "version": "1.0.0",
+  "description": "Экзаменационное задание по дисциплине Основы веб-технологий",
+  "main": "proxy-server.js",
+  "scripts": {
+    "start": "node proxy-server.js",
+    "dev": "node proxy-server.js"
+  },
+  "keywords": [
+    "web",
+    "exam",
+    "language-school"
+  ],
+  "author": "",
+  "license": "ISC"
+}

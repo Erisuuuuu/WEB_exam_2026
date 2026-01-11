@@ -1,5 +1,12 @@
 // Базовый URL API
-const API_BASE_URL = 'https://exam-api-courses.std-900.ist.mospolytech.ru/api';
+// Для локальной разработки используйте прокси: '/api'
+// Для продакшена: 'http://exam-api-courses.std-900.ist.mospolytech.ru/api'
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? '/api' 
+    : 'http://exam-api-courses.std-900.ist.mospolytech.ru/api';
+
+// API ключ для аутентификации (передается как query параметр api_key)
+const API_KEY = '0f2152ae-2c33-46cc-94d9-51656c675b81';
 
 // Функция для отображения уведомлений
 function showNotification(message, type = 'info') {
@@ -24,6 +31,10 @@ function showNotification(message, type = 'info') {
 // Функция для выполнения HTTP запросов
 async function apiRequest(url, method = 'GET', data = null) {
     try {
+        // Добавляем API ключ как query параметр
+        const separator = url.includes('?') ? '&' : '?';
+        const fullUrl = `${API_BASE_URL}${url}${separator}api_key=${API_KEY}`;
+        
         const options = {
             method: method,
             headers: {
@@ -37,13 +48,16 @@ async function apiRequest(url, method = 'GET', data = null) {
             options.body = JSON.stringify(data);
         }
 
-        const response = await fetch(`${API_BASE_URL}${url}`, options);
+        console.log(`[API Request] ${method} ${fullUrl}`, data ? { data } : '');
+        const response = await fetch(fullUrl, options);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const jsonData = await response.json();
+        console.log(`[API Response]`, jsonData);
+        return jsonData;
     } catch (error) {
         console.error('API request error:', error);
         
@@ -70,6 +84,16 @@ const coursesAPI = {
             if (level) url += `&level=${encodeURIComponent(level)}`;
             
             const response = await apiRequest(url);
+            // API возвращает массив напрямую, а не объект с items
+            if (Array.isArray(response)) {
+                return {
+                    items: response,
+                    total: response.length,
+                    page: page,
+                    limit: limit
+                };
+            }
+            // Если ответ уже в формате {items, total}, возвращаем как есть
             return response;
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -80,7 +104,9 @@ const coursesAPI = {
     // Получить информацию о курсе
     async getCourse(courseId) {
         try {
-            return await apiRequest(`/course/${courseId}`);
+            // Согласно заданию: api/course/{course-id}
+            // Но список курсов - /courses, поэтому пробуем /courses/{id}
+            return await apiRequest(`/courses/${courseId}`);
         } catch (error) {
             console.error('Error fetching course:', error);
             return null;
@@ -94,6 +120,10 @@ const tutorsAPI = {
     async getTutors() {
         try {
             const response = await apiRequest('/tutors');
+            // API может возвращать массив напрямую или объект с items
+            if (Array.isArray(response)) {
+                return response;
+            }
             return response.items || [];
         } catch (error) {
             console.error('Error fetching tutors:', error);

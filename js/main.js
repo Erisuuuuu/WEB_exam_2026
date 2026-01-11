@@ -40,7 +40,9 @@ async function loadCourses(page = 1, name = '', level = '') {
                         <p class="card-text flex-grow-1">${course.description || 'Описание курса отсутствует'}</p>
                         <div class="mt-auto">
                             <p class="text-muted mb-2">
-                                <small>Язык: ${course.language || 'Не указан'}</small>
+                                <small>Преподаватель: ${course.teacher || 'Не указан'}</small><br>
+                                <small>Длительность: ${course.total_length || 'Не указана'} недель</small><br>
+                                <small>Стоимость: ${course.course_fee_per_hour || 'Не указана'} руб/час</small>
                             </p>
                             <button class="btn btn-primary w-100" onclick="showCourseDetails(${course.id})">
                                 Подробнее
@@ -106,7 +108,10 @@ async function showCourseDetails(courseId) {
     try {
         const course = await coursesAPI.getCourse(courseId);
         if (course) {
-            alert(`Курс: ${course.name || 'Название не указано'}\n\nОписание: ${course.description || 'Описание отсутствует'}\n\nУровень: ${course.level || 'Не указан'}\n\nЯзык: ${course.language || 'Не указан'}`);
+            const startDates = course.start_dates && course.start_dates.length > 0 
+                ? course.start_dates.slice(0, 3).map(d => new Date(d).toLocaleDateString('ru-RU')).join(', ') 
+                : 'Не указаны';
+            alert(`Курс: ${course.name || 'Название не указано'}\n\nОписание: ${course.description || 'Описание отсутствует'}\n\nПреподаватель: ${course.teacher || 'Не указан'}\n\nУровень: ${course.level || 'Не указан'}\n\nДлительность: ${course.total_length || 'Не указана'} недель\n\nЗанятий в неделю: ${course.week_length || 'Не указано'}\n\nСтоимость: ${course.course_fee_per_hour || 'Не указана'} руб/час\n\nБлижайшие даты начала: ${startDates}`);
         } else {
             showNotification('Не удалось загрузить информацию о курсе', 'error');
         }
@@ -139,9 +144,10 @@ async function loadTutors() {
                     <div class="card-body">
                         <h5 class="card-title">${tutor.name || 'Имя не указано'}</h5>
                         <p class="card-text">
-                            <strong>Языки:</strong> ${tutor.languages ? tutor.languages.join(', ') : 'Не указаны'}<br>
-                            <strong>Опыт:</strong> ${tutor.experience || 'Не указан'}<br>
-                            <strong>Рейтинг:</strong> ${tutor.rating ? '⭐'.repeat(Math.round(tutor.rating)) : 'Не указан'}
+                            <strong>Языки:</strong> ${tutor.languages_offered ? tutor.languages_offered.join(', ') : (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Не указаны')}<br>
+                            <strong>Опыт:</strong> ${tutor.work_experience || tutor.experience || 'Не указан'} ${tutor.work_experience ? 'лет' : ''}<br>
+                            <strong>Уровень:</strong> ${tutor.language_level || 'Не указан'}<br>
+                            <strong>Стоимость:</strong> ${tutor.price_per_hour || 'Не указана'} ${tutor.price_per_hour ? 'руб/час' : ''}
                         </p>
                         ${tutor.description ? `<p class="card-text"><small class="text-muted">${tutor.description}</small></p>` : ''}
                         <button class="btn btn-outline-primary" onclick="showTutorDetails(${tutor.id})">
@@ -163,7 +169,9 @@ async function showTutorDetails(tutorId) {
     try {
         const tutor = await tutorsAPI.getTutor(tutorId);
         if (tutor) {
-            alert(`Репетитор: ${tutor.name || 'Имя не указано'}\n\nЯзыки: ${tutor.languages ? tutor.languages.join(', ') : 'Не указаны'}\n\nОпыт: ${tutor.experience || 'Не указан'}\n\nОписание: ${tutor.description || 'Описание отсутствует'}`);
+            const languages = tutor.languages_offered ? tutor.languages_offered.join(', ') : 
+                            (tutor.languages_spoken ? tutor.languages_spoken.join(', ') : 'Не указаны');
+            alert(`Репетитор: ${tutor.name || 'Имя не указано'}\n\nЯзыки (преподает): ${languages}\n\nОпыт работы: ${tutor.work_experience || tutor.experience || 'Не указан'} ${tutor.work_experience ? 'лет' : ''}\n\nУровень: ${tutor.language_level || 'Не указан'}\n\nСтоимость: ${tutor.price_per_hour || 'Не указана'} ${tutor.price_per_hour ? 'руб/час' : ''}`);
         } else {
             showNotification('Не удалось загрузить информацию о репетиторе', 'error');
         }
