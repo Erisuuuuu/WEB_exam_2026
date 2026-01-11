@@ -1,6 +1,9 @@
 // Текущая страница пагинации
 let currentPage = 1;
 const coursesPerPage = 6;
+// Параметры поиска
+let currentSearchName = '';
+let currentSearchLevel = '';
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
@@ -10,14 +13,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Загрузка курсов
-async function loadCourses(page = 1, name = '', level = '') {
+async function loadCourses(page = 1, name = null, level = null) {
+    // Сохраняем параметры поиска
+    if (name !== null) currentSearchName = name;
+    if (level !== null) currentSearchLevel = level;
+    
+    // Используем сохраненные параметры, если новые не переданы
+    const searchName = name !== null ? name : currentSearchName;
+    const searchLevel = level !== null ? level : currentSearchLevel;
+    
     const coursesContainer = document.getElementById('coursesContainer');
     if (!coursesContainer) return;
 
     coursesContainer.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Загрузка...</span></div></div>';
 
     try {
-        const response = await coursesAPI.getCourses(page, coursesPerPage, name, level);
+        const response = await coursesAPI.getCourses(page, coursesPerPage, searchName, searchLevel);
         const courses = response.items || [];
         const total = response.total || 0;
 
@@ -76,7 +87,7 @@ function createPagination(currentPage, totalPages) {
     // Кнопка "Предыдущая"
     paginationHTML += `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="loadCourses(${currentPage - 1}); return false;">Предыдущая</a>
+            <a class="page-link" href="#" onclick="loadCourses(${currentPage - 1}, null, null); return false;">Предыдущая</a>
         </li>
     `;
 

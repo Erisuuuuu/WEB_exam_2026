@@ -74,6 +74,13 @@ async function apiRequest(url, method = 'GET', data = null) {
     }
 }
 
+// Маппинг русских названий уровней на английские
+const levelMapping = {
+    'начальный': 'Beginner',
+    'средний': 'Intermediate',
+    'продвинутый': 'Advanced'
+};
+
 // API для работы с курсами
 const coursesAPI = {
     // Получить список курсов
@@ -81,20 +88,58 @@ const coursesAPI = {
         try {
             let url = `/courses?page=${page}&limit=${limit}`;
             if (name) url += `&name=${encodeURIComponent(name)}`;
-            if (level) url += `&level=${encodeURIComponent(level)}`;
+            
+            // Преобразуем русский уровень в английский для API
+            let apiLevel = level;
+            if (level && levelMapping[level.toLowerCase()]) {
+                apiLevel = levelMapping[level.toLowerCase()];
+            }
+            if (apiLevel) url += `&level=${encodeURIComponent(apiLevel)}`;
             
             const response = await apiRequest(url);
+            let courses = [];
+            
             // API возвращает массив напрямую, а не объект с items
             if (Array.isArray(response)) {
-                return {
-                    items: response,
-                    total: response.length,
-                    page: page,
-                    limit: limit
-                };
+                courses = response;
+            } else if (response.items && Array.isArray(response.items)) {
+                courses = response.items;
             }
-            // Если ответ уже в формате {items, total}, возвращаем как есть
-            return response;
+            
+            // Фильтрация на клиенте, если API не фильтрует
+            if (name || level) {
+                courses = courses.filter(course => {
+                    let matches = true;
+                    
+                    // Фильтр по названию (регистронезависимый поиск)
+                    if (name) {
+                        const courseName = (course.name || '').toLowerCase();
+                        const searchName = name.toLowerCase();
+                        matches = matches && courseName.includes(searchName);
+                    }
+                    
+                    // Фильтр по уровню
+                    if (level) {
+                        const apiLevel = levelMapping[level.toLowerCase()] || level;
+                        matches = matches && course.level === apiLevel;
+                    }
+                    
+                    return matches;
+                });
+            }
+            
+            // Применяем пагинацию к отфильтрованным результатам
+            const total = courses.length;
+            const startIndex = (page - 1) * limit;
+            const endIndex = startIndex + limit;
+            const paginatedCourses = courses.slice(startIndex, endIndex);
+            
+            return {
+                items: paginatedCourses,
+                total: total,
+                page: page,
+                limit: limit
+            };
         } catch (error) {
             console.error('Error fetching courses:', error);
             return { items: [], total: 0, page: 1, limit: 6 };
